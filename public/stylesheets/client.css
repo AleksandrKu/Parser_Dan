@@ -1,0 +1,45 @@
+.footer {
+    text-align: left;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    margin-bottom: 0;
+}
+
+body {
+    margin-bottom: 2rem;
+    background-color: white;
+}
+.pointer {
+cursor: pointer
+}
+.hide {
+    display: none
+}
+.custom-select {
+    font-size: 16px;
+}
+.display-5 {
+    font-size: 24px;
+    text-align: center;
+}
+#result{
+    text-align: center;
+}
+.jumbotron {
+    padding: 10px;
+}
+#count-all-points {
+    text-align: center;
+}
+.center {
+    text-align: center;
+}
+#users > li >span{
+    margin-left: 15px;
+}
+input[type=number]{
+    width: 80px;
+}

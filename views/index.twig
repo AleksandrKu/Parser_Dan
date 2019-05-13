@@ -1,0 +1,101 @@
+<html>
+<head>
+    <title>Growthhackers</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap-material-design.min.css">
+    <link rel="stylesheet" href="/stylesheets/client.css">
+</head>
+<body>
+<div>
+    <br>
+    <h1 class="center">Growthhackers</h1><br>
+    <div class="container">
+        <div class="jumbotron">
+            <div class="display-5" id="work">Scraper is not working!</div>
+            <div class="center">
+                <p><label for="pages"> Pages </label><input type="number" min="1" max="20" id="pages" value="15">
+                    <label for="users-number"> Users </label><input type="number" min="1" id="users-number" value="300">
+                </p>
+                <a class="btn btn-primary btn-lg btn-outline-success" role="button" id="start">Start parse</a>
+            </div>
+            <div class="center">
+                <br>
+                <div><a class="btn btn-primary btn-lg btn-outline-success" role="button" title="Download file"
+                        id="download">Download</a></div>
+            </div>
+        </div>
+        <div id="count-all-points"></div>
+    </div>
+    <div id="result"></div>
+    <div>
+        <ul style="list-style-type:none;" id="users"></ul>
+    </div>
+</div>
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    window.onload = function () {
+        //const socket = io.connect('http://159.89.5.205:3131');
+        const socket = io.connect('http://localhost:3131');
+
+        const working = document.querySelector('#work');
+        const countAllPoints = document.querySelector('#count-all-points');
+        const users = document.querySelector('#users');
+        socket.on('count_users', (data) => {
+            console.log(data);
+            countAllPoints.innerHTML = `Users was saved: ${data.count}`;
+            working.innerHTML = 'Parser is working!';
+        });
+        socket.on('result_array', (data) => {
+            let stock = '';
+            let count = 0;
+            for (const elem of data.uniqueUsersWithCount) {
+                count++;
+                const elements = elem[0].split('||');
+                const link = elements[0];
+                const name = elements[1];
+                stock += `<li>${count}.  <a href='https://growthhackers.com${link}'  target='_blank'> ${name}</a> <span> ${elem[1]}</span></li>`;
+
+            }
+            users.innerHTML = stock;
+        });
+        const download = document.getElementById("download");
+        download.onclick = () => {
+            window.location.href = "/download/";
+        }
+        const button_start = document.getElementById("start");
+        button_start.onclick = () => {
+            console.log('button_start.onclick');
+            document.getElementById("result").innerHTML = `<img src="./images/load.gif">`;
+            const pages = document.getElementById("pages").value;
+            const numberUsers = document.getElementById("users-number").value;
+            working.innerHTML = 'Parser is working!';
+            countAllPoints.innerHTML = '';
+            const myVar = {key: 'start', pages, numberUsers }
+            fetch('/parse', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(myVar)
+            })
+                .then(function (response) {
+                    console.log(response);
+                }, function (error) {
+                    console.log(error);
+                })
+                .catch(err => console.error('Caught error: ', err))
+        };
+
+        socket.on('endParsing', (data) => {
+            console.log('endParsing');
+            document.getElementById("result").innerHTML = `Write ${data.count} records`;
+            working.innerHTML = 'The end!';
+            setTimeout(() => {
+                window.location.href = "/download";
+            }, 3000)
+        });
+    }
+</script>
+</body>
+</html>
