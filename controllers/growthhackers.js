@@ -31,6 +31,7 @@ async function getPostsFromOnePage(page) {
                 debugger;
                 return result;
             });
+            console.log("Scrape one page");
             resolve(posts);
         } catch (e) {
             console.log(e);
@@ -78,7 +79,15 @@ async function getUserInfo(userLink, pause = 10000) {
                     submissions = '',
                     comments = '',
                     questions = '',
-                    siteLink = '';
+                    siteLink = '',
+                    linkedin = '',
+                    twitter = '',
+                    facebook = '',
+                    plusGoogle = '',
+                    angel = '',
+                    pinterest = '',
+                    instagram = '',
+                    github = '';
                 const socialsLinks = [];
                 try {
                     name = $('#my-profile-about-holder > h1').text();
@@ -94,6 +103,18 @@ async function getUserInfo(userLink, pause = 10000) {
                     $('#socials-links > div > div:nth-child(1) > div.social.social-my-profile > a.link-social').each(function (index, element) {
                         socialsLinks.push($(element).attr('href').trim());
                     });
+                    if (Array.isArray(socialsLinks) && socialsLinks.length) {
+                        for (const link of socialsLinks) {
+                            linkedin = (link.indexOf('linkedin.com') + 1) ? link : linkedin;
+                            twitter = (link.indexOf('twitter.com') + 1) ? link : twitter;
+                            facebook = (link.indexOf('facebook.com') + 1) ? link : facebook;
+                            plusGoogle = (link.indexOf('plus.google.com') + 1) ? link : plusGoogle;
+                            angel = (link.indexOf('angel.co') + 1) ? link : angel;
+                            pinterest = (link.indexOf('pinterest.com') + 1) ? link : pinterest;
+                            instagram = (link.indexOf('instagram.com') + 1) ? link : instagram;
+                            github = (link.indexOf('github.com') + 1) ? link : github;
+                        }
+                    }
                     siteLink = $('#user-site-link').length ? $('#user-site-link').attr('href') : '';
                 } catch (e) {
                     console.log(e);
@@ -107,6 +128,14 @@ async function getUserInfo(userLink, pause = 10000) {
                     experienceLink,
                     location,
                     socialsLinks,
+                    linkedin,
+                    twitter,
+                    facebook,
+                    plusGoogle,
+                    angel,
+                    pinterest,
+                    instagram,
+                    github,
                     siteLink,
                     upvotes,
                     submissions,
