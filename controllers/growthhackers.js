@@ -83,7 +83,7 @@ async function getUserInfo(userLink, pause = 10000) {
                 try {
                     name = $('#my-profile-about-holder > h1').text();
                     name = name.split('\n')[1] ? name.split('\n')[1] : name;
-                    aboutMe = $('#my-profile-about-blocks > div.block > div.bio > span').text().replace('\n', '');
+                    aboutMe = $('#my-profile-about-blocks > div.block > div.bio > span').text().replace(/\n/g, ' ');
                     experience = $('#my-profile-about-blocks > div.block > div.experience > a').text();
                     experienceLink = $('#my-profile-about-blocks > div.block > div.experience > a').attr('href');
                     location = $('#my-profile-about-blocks > div.block > div.string > div.location > a').text();
